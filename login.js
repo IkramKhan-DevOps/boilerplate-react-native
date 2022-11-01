@@ -1,180 +1,130 @@
-'use strict';
-
 import React, { Component } from 'react';
-
-import {
-  StyleSheet,
-  View,
-  AsyncStorage,
-  Alert,
-  TouchableOpacity
+import { StatusBar } from 'expo-status-bar';
+import { 
+  ActivityIndicator, Button, Image, ImageBackground, StyleSheet, 
+  Text, TextInput, TouchableOpacity, View , Alert
 } from 'react-native';
-import { Container,
-         Header,
-         Content,
-         Item,
-         Input,
-         Form,
-         Thumbnail,
-         Label,
-         Button,
-         Text
-         } from 'native-base';
-import Loader from '../Indicator/loader';
-import { NavigationActions } from 'react-navigation';
+import { AsyncStorage } from 'react-native';
 
-class loginform extends Component {
-    constructor() {
-    super();
-    this.state = {
-      username : '',
-      password : '',
-      success : '',
-      loading: false
+
+class LoginApp extends Component {
+
+    constructor(props) {
+      super(props);
+  
+      this.state = {
+        email: '',
+        password: '',
+        success: '',
+        loading: false
+      };
+  
     }
-  }
-
-    handleClick(navigate){
-      this.setState({
-        loading: true
-      });
-
-      fetch('http://dev.infinite-creative.com/sispak_api/Auth/token', {
-       method: 'POST',
-       headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                  },
-        // body : 
+  
+    handleClick(){
+      this.setState({loading:true});
+      console.log("State added now calling api ....")
+      
+      const uri = "https://marktestapp.pythonanywhere.com/api/auth/rider/login/"; 
+      fetch(uri, {
+        method: "POST",
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify({
-              username: this.state.username,
-              password: this.state.password,
-             })
+          email: this.state.email,
+          password: this.state.password,
         })
-        .then((response) => response.json())
-        .then((response) => {
-                 this.setState({
-                      loading: false
-                  }, ()=>{
-
-                    if (response.token != undefined) {
-                      console.log(response);
-                       AsyncStorage.setItem('tokenUser', response.token);
-                       AsyncStorage.setItem('statusUser', response.status);
-                       AsyncStorage.setItem('idUser', response.id);
-                       AsyncStorage.setItem('Username', response.username);
-                           const resetAction = NavigationActions.reset({
-                            index: 0,
-                            actions: [
-                              NavigationActions.navigate({ routeName: 'Beranda'})
-                            ]
-                          })
-                        this.props.data.dispatch(resetAction)
-                    }else{
-                      
-                      this.setState({ spinner: false });
-                      setTimeout(() => {
-                        Alert.alert('Warning','Username / Password Salah!');
-                      }, 100);       
-                    
-                            }
-                  }
-                );
-                 
-                    
-                
-
-        }).done();
-  }
-
-  render() {
-    const { navigate } = this.props.data;
-    return (
-      <Content style={styles.contentLogin}>
-            <Loader loading={this.state.loading} />
-            <View style={styles.center}>
-                  <Thumbnail square large source={require('../../Images/logo.png')} style={styles.images}/>
-                    <Text style={styles.font1}>Kleenly</Text>
-            </View>
+      })
+      .then((response) => response.json())
+      .then((response) => {
+        this.setState({
+          loading: false
+        })
+        if (response.tokens != undefined){
+          AsyncStorage.setItem('user_id', response.id);
+          AsyncStorage.setItem('email', response.email);
+          AsyncStorage.setItem('username', response.username);
+          AsyncStorage.setItem('access', response.tokens.access);
+          AsyncStorage.setItem('refresh', response.tokens.refresh);
           
-          <Form style={styles.formLogin}>
-            <Item floatingLabel>
-              <Label>
-                <Text style={styles.st_inputfnt}>Username</Text>
-              </Label>
-              <Input style={styles.st_inputfnt} onChangeText={(text) => this.setState({username:text})}/>
-            </Item>
-            <Item floatingLabel>
-              <Label>
-                <Text style={styles.st_inputfnt}>Password</Text>
-              </Label>
-              <Input style={styles.st_inputfnt} secureTextEntry={true} onChangeText={(text) => this.setState({password:text})}/>
-            </Item>
-          </Form>
-            <Button block info style={styles.footerBottom} onPress={() => this.handleClick(navigate)}>
-              <Text>Sign In</Text>
-          </Button>
-
-
-         <View style={styles.footerBottomSignUp}>
-            <TouchableOpacity onPress={() => navigate('Daftar')}>
-              <Text style={styles.st_signup}>
-                Belum pernah registrasi? SIGN UP!
-              </Text>
-            </TouchableOpacity>
-        </View>
-
-        </Content>
+          Alert.alert("Successfully Login", "Welcome back Mr "+response.username);
+  
+        }else{
+          setTimeout(() => {
+            Alert.alert('Warning',"Invalid credentials are provided");
+          }, 100);
+        }
+      });
+    }
+  
+  
+    render(){ 
+      return (
+      <View style={styles.container}>
+        <ImageBackground source={require("./assets/mobile-bg.jpg")}  style={styles.image}>
+        <Image source={require("./assets/favicon.png")}></Image>
+        <Text style={styles.h1}>EXARTH</Text>
+        <Text numberOfLines={1} style={styles.textWhite}>the home of exalters is building exarth core team.</Text>
+        {/* <ActivityIndicator size="large" color="red"/> */}
+  
+         <View style={{top:5, marginBottom:20}}>
+          <Text style={{color:"white", left: 14}}>Email</Text>
+          <TextInput style={styles.input} cursorColor="red" value={this.state.email} onChangeText={(text)=>this.setState({email:text})} autoComplete="email"/>
+  
+          <Text style={{color:"white", left: 14}}>Password</Text>
+          <TextInput style={styles.input} value={this.state.password} onChangeText={(text) => this.setState({password:text})}/>
+         </View>
+  
+         <Button block info style={styles.button} onPress={() => this.handleClick()} title='Become an exalter' color="red" touchSoundDisabled="true"  accessibilityLabel="accessible now" />
+  
+        <StatusBar style="auto" accessible="true"/>
+        </ImageBackground>
+      </View>
     );
+  };
   }
-}
-
-const styles = StyleSheet.create({
-  icon:{
-    color: 'white',
-  },
-  footerBottom:{
-    marginTop: 26,
-    paddingTop: 10,
-    marginLeft: 16,
-    marginRight: 16,
-  },
-  formLogin : {
-    marginTop :30,
-    paddingLeft : 10,
-    paddingRight : 30,
-  },
-  contentLogin : {
-    marginTop : 10,
-  },
-  images:{
-      marginTop: 80,
-      width: 150,
-      height: 150,
-      borderRadius: 20,
-  },
-  font1:{
-      fontSize: 20,
-      color: 'white',
-      fontWeight: 'bold',
-    },
-  center:{
+  
+  const styles = StyleSheet.create({
+    container: {
       flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center', 
-  },
-  footerBottomSignUp:{
-      marginTop: 56,
-      alignItems: 'center', 
     },
-  st_signup:{
-      color: 'white',
-      fontWeight: '500', 
+  
+    h1: {
+      color:"white",
+      fontWeight:"bold",
+      fontSize: 50,
+      textAlign: "center"
     },
-  st_inputfnt:{
-      color: 'white',
-  }
-});
-
-
-export default loginform;
+  
+    textWhite: {
+      color: "white",
+      textAlign: "center",
+      bottom:8
+    },
+  
+    button:{
+      padding:20,
+      left:10,
+      right:10
+    },
+  
+    input:{
+      backgroundColor: "#fff",
+      height: 40,
+      width: 400,
+      margin: 12,
+      borderWidth: 1,
+      padding: 10,
+    },
+  
+    image: {
+      flex:1,
+      alignItems:"center",
+      justifyContent:"center"
+    }
+  });
+  
+  
+  export default LoginApp;
