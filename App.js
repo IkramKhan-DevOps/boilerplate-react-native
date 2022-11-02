@@ -8,6 +8,7 @@ import {AsyncStorage} from 'react-native';
 import LoginApp from './Login'
 import DashboardScreen from "./Dashboard";
 import HistoryScreen from "./screens/HistoryScreen";
+import DeliveryDetailScreen from "./screens/DeliveryDetailScreen";
 
 class App extends Component {
 
@@ -15,7 +16,8 @@ class App extends Component {
         return (
             // <LoginApp />
             // <DashboardScreen/>
-            <HistoryScreen/>
+            // <HistoryScreen/>
+            <DeliveryDetailScreen/>
         );
     };
 }
