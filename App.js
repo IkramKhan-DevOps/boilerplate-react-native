@@ -9,15 +9,17 @@ import LoginApp from './Login'
 import DashboardScreen from "./Dashboard";
 import HistoryScreen from "./screens/HistoryScreen";
 import DeliveryDetailScreen from "./screens/DeliveryDetailScreen";
+import Untitled1 from "./screens/TempScreen";
 
 class App extends Component {
 
     render() {
         return (
-            // <LoginApp />
+            // <LoginApp/>
             // <DashboardScreen/>
+            <Untitled1/>
             // <HistoryScreen/>
-            <DeliveryDetailScreen/>
+            // <DeliveryDetailScreen/>
         );
     };
 }
