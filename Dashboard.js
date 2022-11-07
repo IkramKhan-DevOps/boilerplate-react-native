@@ -1,5 +1,15 @@
 import React, {Component} from 'react';
-import {AsyncStorage, Alert, Image, SafeAreaView, StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import {
+    AsyncStorage,
+    Alert,
+    Image,
+    SafeAreaView,
+    StyleSheet,
+    Text,
+    View,
+    TouchableOpacity,
+    TouchableHighlight
+} from 'react-native';
 import axios from 'axios';
 import BaseScreen from "./components/BaseScreen";
 import {Ionicons, MaterialCommunityIcons} from "@expo/vector-icons";
@@ -74,8 +84,8 @@ class DashboardScreen extends Component {
                         <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile')}>
                             <Ionicons name={"eye"} size={25} color={colors.dark}/>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => this.props.navigation.navigate('History')}>
-                            <Ionicons name={"list"} size={25} color={colors.dark}/>
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate('Login')}>
+                            <MaterialCommunityIcons name={"logout"} size={25} color={colors.danger}/>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -111,6 +121,13 @@ class DashboardScreen extends Component {
                                 color: colors.secondary,
                                 fontWeight: "bold"
                             }}>Close this order - set as complete</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <View style={{marginTop: 20, alignItems: "center"}}>
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate("History")}>
+                            <Text style={{fontWeight: "bold", fontSize: 15, color: colors.blue}}>
+                                <MaterialCommunityIcons name={"link"} size={15}/>Click to view History of Deliveries
+                            </Text>
                         </TouchableOpacity>
                     </View>
                 </View>
