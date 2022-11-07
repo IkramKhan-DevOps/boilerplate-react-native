@@ -1,8 +1,12 @@
-import {Platform, SafeAreaView} from "react-native";
+import {Platform, SafeAreaView, StatusBar} from "react-native";
 
 function BaseScreen(props) {
     return (
-        <SafeAreaView style={{flex: 1, paddingTop: Platform.OS === "android" ? 10 : 0}}>
+        <SafeAreaView style={{
+            flex: 1,
+            backgroundColor: "#fff",
+            paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0
+        }}>
             {props.children}
         </SafeAreaView>
     )

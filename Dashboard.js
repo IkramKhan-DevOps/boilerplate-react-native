@@ -1,14 +1,17 @@
 import React, {Component} from 'react';
-import {AsyncStorage, Alert, Image, SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import {AsyncStorage, Alert, Image, SafeAreaView, StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import axios from 'axios';
+import BaseScreen from "./components/BaseScreen";
+import {Ionicons, MaterialCommunityIcons} from "@expo/vector-icons";
+import colors from "./config/Colors";
 
 class DashboardScreen extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            username: "",
-            email: ""
+            username: null,
+            email: null
         };
     }
 
@@ -20,15 +23,13 @@ class DashboardScreen extends Component {
     call_profile_api = () => {
 
         const profile_uri = "https://marktestapp.pythonanywhere.com/api/my/profile/";
-        const active_orders_uri = "https://marktestapp.pythonanywhere.com/api/my/delivery/";
-        const access = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjY3NTAzNjQ1LCJpYXQiOjE2Njc0MTcyNDUsImp0aSI6IjJlNTQzNDk4OWFiZDQzOWI5NDVjMWU2NDRkYjFmN2NhIiwidXNlcl9pZCI6Ijc1ZGY1NDFlLTQ4NDMtNDZiYS1iMjg0LTAxNDAzNzI1NDZmZCJ9.HnPadPf-vi5S58WcoT69tEafxKDTGd-2xRaQWNPSYQg"
+        const access = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjY3ODk0NTQzLCJpYXQiOjE2Njc4MDgxNDMsImp0aSI6ImVkYWY2MzBjZWVmNTQxNzA4MDcwYjZhY2NmYTI0YjVhIiwidXNlcl9pZCI6Ijc1ZGY1NDFlLTQ4NDMtNDZiYS1iMjg0LTAxNDAzNzI1NDZmZCJ9.oOCUvClQjNI4ywpSUqupMHMUM6bLlj9uL7LCeIhQ_dA"
 
         axios.get(profile_uri, {
             headers: {
                 Authorization: 'Bearer ' + access
             }
         }).then(response => {
-            console.log(response.data.username)
             this.setState({
                 username: response.data.username,
                 email: response.data.email,
@@ -41,60 +42,81 @@ class DashboardScreen extends Component {
     call_delivery_api = () => {
 
         const active_orders_uri = "https://marktestapp.pythonanywhere.com/api/my/delivery/";
-        const access = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjY3NTAzNjQ1LCJpYXQiOjE2Njc0MTcyNDUsImp0aSI6IjJlNTQzNDk4OWFiZDQzOWI5NDVjMWU2NDRkYjFmN2NhIiwidXNlcl9pZCI6Ijc1ZGY1NDFlLTQ4NDMtNDZiYS1iMjg0LTAxNDAzNzI1NDZmZCJ9.HnPadPf-vi5S58WcoT69tEafxKDTGd-2xRaQWNPSYQg"
+        const access = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjY3ODk0NTQzLCJpYXQiOjE2Njc4MDgxNDMsImp0aSI6ImVkYWY2MzBjZWVmNTQxNzA4MDcwYjZhY2NmYTI0YjVhIiwidXNlcl9pZCI6Ijc1ZGY1NDFlLTQ4NDMtNDZiYS1iMjg0LTAxNDAzNzI1NDZmZCJ9.oOCUvClQjNI4ywpSUqupMHMUM6bLlj9uL7LCeIhQ_dA"
 
         axios.get(active_orders_uri, {
             headers: {
                 Authorization: 'Bearer ' + access
             }
         }).then(response => {
-            console.log(response.data)
+
         }).catch(error => {
             Alert.alert("Authentication failed");
-            console.log(error);
         });
     }
 
     render() {
         return (
-            <View style={styles.container}>
-                <View style={styles.headContainer}>
-                    <SafeAreaView>
-                        <Image source={require("./assets/favicon.png")}/>
-                        <Text>{this.state.username}</Text>
-                        <Text>{this.state.email}</Text>
-                    </SafeAreaView>
+            <BaseScreen>
+                <View style={{
+                    flexDirection: "row",
+                    backgroundColor: colors.secondary,
+                    padding: 20,
+                    borderBottomColor: colors.secondary,
+                    borderBottomWidth: 1
+                }}>
+                    <Ionicons name="md-checkmark-circle" size={50} color="green"/>
+                    <View style={{marginTop: 2, flex: 1}}>
+                        <Text style={{fontWeight: "bold", fontSize: 20}}>Ikram Khan</Text>
+                        <Text style={{}}>Founder and CEO at exarth</Text>
+                    </View>
+                    <View style={{justifyContent: "center"}}>
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile')}>
+                            <Ionicons name={"eye"} size={25} color={colors.dark}/>
+                        </TouchableOpacity>
+                    </View>
                 </View>
-                <View style={styles.subContainer}></View>
-            </View>
+                <View style={{padding: 20}}>
+                    <Image source={require("./assets/images/warehouse.gif")} style={{height: 500, width: "100%"}}/>
+                    <View style={{flexDirection: "row"}}>
+                        <View style={{flex: 1}}>
+                            <Text style={{fontWeight: "bold", fontSize: 24}}>Warehouse</Text>
+                            <Text style={{color: "grey"}}>House 155# Auranagabad MPS Mansehra</Text>
+                        </View>
+                        <View>
+                            <Text style={{fontWeight: "bold", fontSize: 24}}>100$</Text>
+                            <Text style={{color: "grey"}}>Ikram Khan</Text>
+                        </View>
+                    </View>
+                    <View style={{marginTop: 40, alignItems: "center"}}>
+                        <TouchableOpacity
+                            style={{
+                                width: "80%",
+                                backgroundColor: colors.danger,
+                                padding: 20,
+                                borderRadius: 25,
+                                marginHorizontal: 20
+                            }}>
+                            <Text style={{
+                                textAlign: "center",
+                                color: colors.light,
+                                fontSize: 24,
+                                fontWeight: "bold"
+                            }}>Deliver</Text>
+                            <Text style={{
+                                textAlign: "center",
+                                color: colors.secondary,
+                                fontWeight: "bold"
+                            }}>Close this order - set as complete</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+
+            </BaseScreen>
         );
     }
 }
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: "center",
-        alignContent: "center"
-
-    },
-
-    headContainer: {
-        justifyContent: "center",
-        alignItems: "center",
-        alignContent: "center",
-        flex: 1,
-        backgroundColor: "red"
-    },
-
-    headerText: {
-        fontWeight: 20
-    },
-
-    subContainer: {
-        flex: 3,
-        backgroundColor: "green"
-    },
-});
+const styles = StyleSheet.create({});
 
 export default DashboardScreen;

@@ -54,7 +54,7 @@ class LoginApp extends Component {
                     AsyncStorage.setItem('access', response.tokens.access);
                     AsyncStorage.setItem('refresh', response.tokens.refresh);
 
-                    Alert.alert("Successfully Login", "Welcome back Mr " + response.username);
+                    Alert.alert("Successfully LoginScreen", "Welcome back Mr " + response.username);
 
                 } else {
                     setTimeout(() => {

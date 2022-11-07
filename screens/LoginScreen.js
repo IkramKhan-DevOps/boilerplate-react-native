@@ -4,13 +4,13 @@ import CustomButton from "../components/CustomButton";
 import colors from "../config/Colors";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-function Login() {
+function LoginScreen({navigation}) {
     const [emailInput, setEmail] = useState(null);
     const [passwordInput, setPassword] = useState(null);
     const [phone, setPhone] = useState(null);
     const [loading, setLoading] = useState(null);
 
-    function handleLogin({navigation}) {
+    function handleLogin() {
         setLoading(true);
 
         fetch("https://marktestapp.pythonanywhere.com/api/auth/rider/login/", {
@@ -28,15 +28,14 @@ function Login() {
                 setLoading(false);
 
                 if (response.tokens !== undefined) {
-                    AsyncStorage.setItem('access_key', response.tokens.access)
-                    AsyncStorage.setItem('refresh_key', response.tokens.refresh)
-                    AsyncStorage.setItem('email', response.email)
-                    AsyncStorage.setItem('username', response.username)
+                    // AsyncStorage.setItem('access_key', response.tokens.access)
+                    // AsyncStorage.setItem('refresh_key', response.tokens.refresh)
+                    // AsyncStorage.setItem('email', response.email)
+                    // AsyncStorage.setItem('username', response.username)
 
                     navigation.navigate('Dashboard')
 
                 } else {
-                    console.log(response);
                     setTimeout(() => {
                         Alert.alert('Warning', "Invalid credentials are provided");
                     }, 100);
@@ -104,7 +103,8 @@ function Login() {
             </View>
 
             <View style={{padding: 20, paddingHorizontal: 30, width: "100%"}}>
-                <CustomButton title={"Login"} onPress={handleLogin} color={colors.danger}/>
+                <CustomButton title={"LoginScreen"} onPress={() => navigation.navigate('Dashboard')}
+                              color={colors.danger}/>
                 {/*<CustomButton title={"Signup"} onPress={() => console.log("Sign up")} color={colors.success}/>*/}
                 <Text style={{color: colors.light, marginTop: 10, textAlign: "center"}}>
                     Forget password ? please consult administration
@@ -115,4 +115,4 @@ function Login() {
 
 }
 
-export default Login;
+export default LoginScreen;
