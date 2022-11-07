@@ -10,6 +10,7 @@ import {AsyncStorage} from 'react-native';
 
 
 import {Font} from "expo";
+import APIEndPoints from "./config/APIEndPoints";
 
 
 class LoginApp extends Component {
@@ -30,8 +31,7 @@ class LoginApp extends Component {
         this.setState({loading: true});
         console.log("State added now calling api ....")
 
-        const uri = "https://marktestapp.pythonanywhere.com/api/auth/rider/login/";
-        fetch(uri, {
+        fetch(APIEndPoints.loginUrl, {
             method: "POST",
             headers: {
                 'Accept': 'application/json',

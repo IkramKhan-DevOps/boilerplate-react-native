@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import {Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {Icon} from "react-native-elements";
 
 function Untitled1(props) {
     return (
@@ -15,7 +16,12 @@ function Untitled1(props) {
             <View className="bg-green-100 w-full p-4 ">
                 <View className="flex flex-row">
                     <View className="">
-                        <Image source={require("../assets/images/favicon.png")}/>
+                        <Icon
+                            size={30}
+                            name='user'
+                            type='antdesign'
+                            color='#517fa4'
+                        />
                     </View>
                     <View className="">
                         <Text className="font-bold pl-2 ">Ikram Khan</Text>
@@ -32,6 +38,7 @@ function Untitled1(props) {
                     <View className="bg-green-200 p-4">
                         <View className={"flex flex-row"}>
                             <View className={"flex-1"}>
+
                                 <Text>
                                     Order ID: 88
                                 </Text>
