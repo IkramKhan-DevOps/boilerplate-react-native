@@ -9,7 +9,7 @@ import {
 import {AsyncStorage} from 'react-native';
 
 
-import {Font} from "expo";
+import {createStackNavigator, createAppContainer} from 'react-navigation';
 import APIEndPoints from "./config/APIEndPoints";
 
 

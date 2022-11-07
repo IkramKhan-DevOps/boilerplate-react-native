@@ -1,9 +1,8 @@
 import React, {useState} from "react";
-import BaseScreen from "../components/BaseScreen";
-import {Alert, AsyncStorage, Image, ImageBackground, Text, TextInput, View} from "react-native";
+import {Alert, Image, ImageBackground, Text, TextInput, View} from "react-native";
 import CustomButton from "../components/CustomButton";
 import colors from "../config/Colors";
-import APIEndPoints from "../config/APIEndPoints";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 function Login() {
     const [emailInput, setEmail] = useState(null);
@@ -11,11 +10,9 @@ function Login() {
     const [phone, setPhone] = useState(null);
     const [loading, setLoading] = useState(null);
 
-    function handleLogin() {
+    function handleLogin({navigation}) {
         setLoading(true);
 
-        console.log(emailInput)
-        console.log(passwordInput)
         fetch("https://marktestapp.pythonanywhere.com/api/auth/rider/login/", {
             method: "POST",
             headers: {
@@ -31,7 +28,12 @@ function Login() {
                 setLoading(false);
 
                 if (response.tokens !== undefined) {
-                    Alert.alert("Successfully Login", "Welcome back Mr " + response.username);
+                    AsyncStorage.setItem('access_key', response.tokens.access)
+                    AsyncStorage.setItem('refresh_key', response.tokens.refresh)
+                    AsyncStorage.setItem('email', response.email)
+                    AsyncStorage.setItem('username', response.username)
+
+                    navigation.navigate('Dashboard')
 
                 } else {
                     console.log(response);
@@ -82,7 +84,7 @@ function Login() {
                         padding: 10,
                         marginBottom: 10
                     }} value={emailInput}
-                    onChangeText={(text) => setEmail({text})} autoComplete="email"
+                    onChangeText={(text) => setEmail(text)} autoComplete="email"
                 ></TextInput>
                 <TextInput
                     placeholder="Password"
@@ -97,7 +99,7 @@ function Login() {
                         height: 50,
                         padding: 10
                     }} value={passwordInput}
-                    onChangeText={(text) => setPassword({text})}
+                    onChangeText={(text) => setPassword(text)}
                 ></TextInput>
             </View>
 
