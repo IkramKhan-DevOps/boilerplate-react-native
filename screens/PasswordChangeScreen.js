@@ -9,9 +9,7 @@ function PasswordChangeScreen(props) {
     const [confirmPasswordValue, setConfirmPassword] = useState(null);
 
     function handleSubmit() {
-        console.log(oldPasswordValue)
-        console.log(newPasswordValue)
-        console.log(confirmPasswordValue)
+        
     }
 
     return (
@@ -23,23 +21,23 @@ function PasswordChangeScreen(props) {
             </View>
             <View style={{padding: 20}}>
                 <TextInput
-                    onChangeText={(text) => setConfirmPassword(text)} value={oldPasswordValue}
+                    onChangeText={(text) => setOldPassword(text)} value={oldPasswordValue}
                     style={styles.input}
                     keyboardType="default"
-                    placeholder="Username"
+                    placeholder="Previous Password"
                     secureTextEntry={true}
                 />
                 <TextInput
                     onChangeText={(text) => setNewPassword(text)} value={newPasswordValue}
                     style={styles.input}
-                    placeholder="First Name"
+                    placeholder="New Password"
                     keyboardType="default"
                     secureTextEntry={true}
                 />
                 <TextInput
                     onChangeText={(text) => setConfirmPassword(text)} value={confirmPasswordValue}
                     style={styles.input}
-                    placeholder="Last Name"
+                    placeholder="Confirm Password"
                     keyboardType="default"
                     secureTextEntry={true}
                 />

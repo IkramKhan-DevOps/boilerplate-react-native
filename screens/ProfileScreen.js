@@ -4,18 +4,14 @@ import {useState} from "react";
 
 function ProfileScreen({navigation}) {
 
-    const [usernameValue, setUsername] = useState("Ikram Ul Haq");
-    const [firstNameValue, setFirstName] = useState("null");
-    const [lastNameValue, setLastName] = useState("null");
+    const [usernameValue, setUsername] = useState(null);
+    const [firstNameValue, setFirstName] = useState(null);
+    const [lastNameValue, setLastName] = useState(null);
     const [emailValue, setEmail] = useState(null);
     const [phoneValue, setPhone] = useState(null);
 
     function handleSubmit() {
-        console.log(usernameValue)
-        console.log(firstNameValue)
-        console.log(lastNameValue)
-        console.log(emailValue)
-        console.log(phoneValue)
+        
     }
 
     return (

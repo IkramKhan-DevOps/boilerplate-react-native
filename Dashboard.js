@@ -74,6 +74,9 @@ class DashboardScreen extends Component {
                         <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile')}>
                             <Ionicons name={"eye"} size={25} color={colors.dark}/>
                         </TouchableOpacity>
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate('History')}>
+                            <Ionicons name={"list"} size={25} color={colors.dark}/>
+                        </TouchableOpacity>
                     </View>
                 </View>
                 <View style={{padding: 20}}>
@@ -111,6 +114,34 @@ class DashboardScreen extends Component {
                         </TouchableOpacity>
                     </View>
                 </View>
+                {/*<View style={{flex: 1}}>*/}
+                {/*    <View style={{*/}
+                {/*        backgroundColor: colors.secondary,*/}
+                {/*        flexDirection: "row",*/}
+                {/*        justifyContent: "center",*/}
+                {/*        alignItems: "flex-end"*/}
+                {/*    }}>*/}
+                {/*        <TouchableOpacity style={{width: "25%", justifyContent: "center"}}>*/}
+                {/*            <Ionicons style={{padding: 10}} name="home" color="black" size={40}*/}
+                {/*                      onPress={() => console.log("home")}/>*/}
+                {/*        </TouchableOpacity>*/}
+
+                {/*        <TouchableOpacity style={{width: "25%", justifyContent: "center"}}>*/}
+                {/*            <Ionicons style={{padding: 10}} name="home" color="black" size={40} type={"antdesign"}*/}
+                {/*                      onPress={() => console.log("user")}/>*/}
+                {/*        </TouchableOpacity>*/}
+
+                {/*        <TouchableOpacity style={{width: "25%", justifyContent: "center"}}>*/}
+                {/*            <Ionicons style={{padding: 10}} name="home" color="black" size={40} type={"antdesign"}*/}
+                {/*                      onPress={() => console.log("dashboard")}/>*/}
+                {/*        </TouchableOpacity>*/}
+
+                {/*        <TouchableOpacity style={{width: "25%", justifyContent: "center"}}>*/}
+                {/*            <Ionicons style={{padding: 10}} name="home" color="black" size={40} type={"antdesign"}*/}
+                {/*                      onPress={() => console.log("logout")}/>*/}
+                {/*        </TouchableOpacity>*/}
+                {/*    </View>*/}
+                {/*</View>*/}
 
             </BaseScreen>
         );

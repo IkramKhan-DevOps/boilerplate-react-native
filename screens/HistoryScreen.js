@@ -1,46 +1,91 @@
-import React, {Component} from 'react';
-import {Text, View} from "react-native";
-import axios from "axios";
+import React, {useState} from "react";
+import {FlatList, Platform, StatusBar, View} from "react-native";
+import ListItem from "../components/ListItem";
+import ListItemSeparator from "../components/ListSeparator";
+import BaseScreen from "../components/BaseScreen";
 
-class HistoryScreen extends Component {
 
-    constructor(props) {
-        super(props);
+const initMessages = [
+    {
+        id: 1,
+        title: "Search",
+        description: "In search of exalters",
+        image: require("../assets/images/logo-red-1000.png")
+    },
+    {
+        id: 2,
+        title: "Find",
+        description: "Found some one on my way",
+        image: require("../assets/images/logo-red-1000.png")
+    },
+    {
+        id: 3,
+        title: "Assign",
+        description: "Swiper down to check them",
+        image: require("../assets/images/logo-red-1000.png")
+    },
+]
 
-        this.state = {
-            apiLoaded: false,
-            data: [],
-        }
-    }
+function HistoryScreen(props) {
+    const [messages, setMessages] = useState(initMessages);
+    const [refreshing, setRefreshing] = useState(false);
 
-    componentDidMount = () => {
-        this.call_history_api();
-    }
+    const handleDelete = (message) => {
+        setMessages(messages.filter((m) => m.id !== message.id));
+    };
 
-    call_history_api = () => {
-        const uri = "https://marktestapp.pythonanywhere.com/api/my/delivery/history/"
-        const access = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjY3NTAzNjQ1LCJpYXQiOjE2Njc0MTcyNDUsImp0aSI6IjJlNTQzNDk4OWFiZDQzOWI5NDVjMWU2NDRkYjFmN2NhIiwidXNlcl9pZCI6Ijc1ZGY1NDFlLTQ4NDMtNDZiYS1iMjg0LTAxNDAzNzI1NDZmZCJ9.HnPadPf-vi5S58WcoT69tEafxKDTGd-2xRaQWNPSYQg"
-
-        axios.get(uri, {
-            headers: {
-                Authorization: "Bearer " + access
-            }
-        }).then(response => {
-            console.log(response.data)
-        }).catch(error => {
-            console.log(error)
-        })
-    }
-
-    render() {
-        return (
-            <View>
-                <Text>
-                    History screen
-                </Text>
-            </View>
-        );
-    }
+    return (
+        <BaseScreen>
+            <FlatList
+                data={messages}
+                keyExtractor={(message) => message.id.toString()}
+                renderItem={({item}) =>
+                    <ListItem title={item.title} subtitle={item.description}
+                              picture={item.image}
+                              onPress={() => console.log("Press: ", item)}
+                              onDelete={() => handleDelete(item)}
+                    />
+                }
+                ItemSeparatorComponent={ListItemSeparator}
+                refreshing={refreshing}
+                onRefresh={() => {
+                    setMessages([
+                        {
+                            id: 1,
+                            title: "Saqib Khan",
+                            description: "Dev Ops engineer",
+                            image: require("../assets/images/logo-red-1000.png")
+                        },
+                        {
+                            id: 2,
+                            title: "Ikram Khan",
+                            description: "Full Stack developer",
+                            image: require("../assets/images/logo-red-1000.png")
+                        },
+                        {
+                            id: 3,
+                            title: "Anas Khan",
+                            description: "MERN Stack developer",
+                            image: require("../assets/images/logo-red-1000.png")
+                        },
+                        {
+                            id: 4,
+                            title: "Sheraz Bilbil",
+                            description: "Flutter developer",
+                            image: require("../assets/images/logo-red-1000.png")
+                        },
+                        {
+                            id: 5,
+                            title: "Waseem Badami",
+                            description: "AI developer",
+                            image: require("../assets/images/logo-red-1000.png")
+                        },
+                    ]);
+                }}
+            />
+        </BaseScreen>
+    );
 }
+
 
 export default HistoryScreen;
