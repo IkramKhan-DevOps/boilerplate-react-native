@@ -21,19 +21,22 @@ const App = () => {
     const [status, setStatus] = useState('loading');
 
     const loadJWT = useCallback(async () => {
+        console.log(authContext?.authState?.authenticated)
+        console.log(authContext?.authState?.accessToken)
+        console.log(authContext?.authState?.refreshToken)
         try {
             const access = await AsyncStorage.getItem('access');
             const refresh = await AsyncStorage.getItem('refresh');
 
+
             authContext.setAuthState({
                 accessToken: access || null,
                 refreshToken: refresh || null,
-                authenticated: access !== null,
+                authenticated: false
             });
             setStatus('success');
         } catch (error) {
             setStatus('error');
-            console.log(`Asyc Error: ${error.message}`);
             authContext.setAuthState({
                 accessToken: null,
                 refreshToken: null,
@@ -51,15 +54,22 @@ const App = () => {
     }
 
     if (authContext?.authState?.authenticated === false) {
-        return <LoginScreen/>;
+        return (
+            <AuthProvider>
+                <AxiosProvider>
+                    <LoginScreen/>
+                </AxiosProvider>
+            </AuthProvider>
+        );
     } else {
+
         return (
             <AuthProvider>
                 <AxiosProvider>
                     <NavigationContainer>
                         <Stack.Navigator initialRouteName="Login">
-                            <Stack.Screen name="Login" component={LoginScreen} options={{headerShown: false}}/>
                             <Stack.Screen name="Dashboard" component={DashboardScreen} options={{headerShown: false}}/>
+                            {/*<Stack.Screen name="Login" component={LoginScreen} options={{headerShown: false}}/>*/}
                             <Stack.Screen name="Profile" component={ProfileScreen} options={{headerShown: true}}/>
                             <Stack.Screen name="PasswordChange" component={PasswordChangeScreen}
                                           options={{headerShown: true}}/>

@@ -11,6 +11,7 @@ import colors from "./config/Colors";
 import {AxiosContext} from "./context/AxioContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {dark} from "nativewind/dist/tailwind/native/dark";
+import {AuthContext, AuthProvider} from "./context/AuthContext";
 
 function DashboardScreen({navigation}) {
     const [deliveries, setDeliveries] = useState([])
@@ -22,6 +23,7 @@ function DashboardScreen({navigation}) {
     })
 
     const {authAxios} = useContext(AxiosContext);
+    const authContext = useContext(AuthContext);
 
     const onLoad = async () => {
         try {
@@ -62,7 +64,7 @@ function DashboardScreen({navigation}) {
                     <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile')}>
                         <Ionicons name={"eye"} size={25} color={colors.dark}/>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => this.props.navigation.navigate('Login')}>
+                    <TouchableOpacity onPress={() => authContext.logout()}>
                         <MaterialCommunityIcons name={"logout"} size={25} color={colors.danger}/>
                     </TouchableOpacity>
                 </View>

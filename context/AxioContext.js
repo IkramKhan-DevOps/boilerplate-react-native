@@ -3,6 +3,7 @@ import axios from 'axios';
 import {AuthContext} from './AuthContext';
 import createAuthRefreshInterceptor from 'axios-auth-refresh';
 import * as Keychain from 'react-native-keychain';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const AxiosContext = createContext();
 const {Provider} = AxiosContext;
@@ -32,13 +33,13 @@ function AxiosProvider({children}) {
 
     const refreshAuthLogic = failedRequest => {
         const data = {
-            refreshToken: authContext.authState.refreshToken,
+            refresh: authContext.authState.refreshToken,
         };
 
         const options = {
             method: 'POST',
             data,
-            url: 'http://localhost:3000/api/refreshToken',
+            url: 'https://marktestapp.pythonanywhere.com/auth/token/refresh/',
         };
 
         return axios(options)
@@ -48,16 +49,11 @@ function AxiosProvider({children}) {
 
                 authContext.setAuthState({
                     ...authContext.authState,
-                    accessToken: tokenRefreshResponse.data.accessToken,
+                    accessToken: tokenRefreshResponse.data.access,
                 });
-
-                await Keychain.setGenericPassword(
-                    'token',
-                    JSON.stringify({
-                        accessToken: tokenRefreshResponse.data.accessToken,
-                        refreshToken: authContext.authState.refreshToken,
-                    }),
-                );
+                
+                await AsyncStorage.setItem('access', tokenRefreshResponse.data.accessToken)
+                await AsyncStorage.setItem('refresh', authContext.authState.refreshToken)
 
                 return Promise.resolve();
             })
