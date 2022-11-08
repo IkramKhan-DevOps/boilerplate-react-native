@@ -1,47 +1,48 @@
-import React, {useState} from "react";
+import React, {useContext, useState} from "react";
 import {Alert, Image, ImageBackground, Text, TextInput, View} from "react-native";
 import CustomButton from "../components/CustomButton";
 import colors from "../config/Colors";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import {AuthContext} from "../context/AuthContext";
+import {AxiosContext} from "../context/AxioContext";
+import {setGenericPassword} from "react-native-keychain";
 
-function LoginScreen({navigation}) {
+const LoginScreen = () => {
     const [emailInput, setEmail] = useState(null);
     const [passwordInput, setPassword] = useState(null);
     const [phone, setPhone] = useState(null);
     const [loading, setLoading] = useState(null);
+    const authContext = useContext(AuthContext);
+    const {publicAxios} = useContext(AxiosContext);
 
-    function handleLogin() {
-        setLoading(true);
+    const handleLogin = async () => {
+        try {
+            const response = await publicAxios.post(
+                '/auth/rider/login/', {
+                    email: emailInput,
+                    password: passwordInput,
+                });
 
-        fetch("https://marktestapp.pythonanywhere.com/api/auth/rider/login/", {
-            method: "POST",
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                email: emailInput,
-                password: passwordInput,
-            })
-        }).then((response) => response.json())
-            .then((response) => {
-                setLoading(false);
-
-                if (response.tokens !== undefined) {
-                    // AsyncStorage.setItem('access_key', response.tokens.access)
-                    // AsyncStorage.setItem('refresh_key', response.tokens.refresh)
-                    // AsyncStorage.setItem('email', response.email)
-                    // AsyncStorage.setItem('username', response.username)
-
-                    navigation.navigate('Dashboard')
-
-                } else {
-                    setTimeout(() => {
-                        Alert.alert('Warning', "Invalid credentials are provided");
-                    }, 100);
-                }
+            const {refresh, access} = response.data.tokens;
+            console.log(response.data.tokens)
+            authContext.setAuthState({
+                accessToken: access,
+                refreshToken: refresh,
+                authenticated: true,
             });
-    }
+
+            await setGenericPassword(
+                'tokens',
+                JSON.stringify({
+                    accessToken: access,
+                    refreshToken: refresh,
+                }),
+            );
+        } catch (error) {
+            console.log(error)
+            Alert.alert('Login Failed', "Login failed");
+        }
+    };
 
     return (
         <ImageBackground
@@ -103,7 +104,7 @@ function LoginScreen({navigation}) {
             </View>
 
             <View style={{padding: 20, paddingHorizontal: 30, width: "100%"}}>
-                <CustomButton title={"LoginScreen"} onPress={() => navigation.navigate('Dashboard')}
+                <CustomButton title={"LoginScreen"} onPress={handleLogin}
                               color={colors.danger}/>
                 {/*<CustomButton title={"Signup"} onPress={() => console.log("Sign up")} color={colors.success}/>*/}
                 <Text style={{color: colors.light, marginTop: 10, textAlign: "center"}}>

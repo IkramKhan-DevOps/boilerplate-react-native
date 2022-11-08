@@ -14,6 +14,8 @@ import axios from 'axios';
 import BaseScreen from "./components/BaseScreen";
 import {Ionicons, MaterialCommunityIcons} from "@expo/vector-icons";
 import colors from "./config/Colors";
+import {AuthProvider} from "./context/AuthContext";
+import {AxiosProvider} from "./context/AxioContext";
 
 class DashboardScreen extends Component {
 
@@ -26,8 +28,8 @@ class DashboardScreen extends Component {
     }
 
     componentDidMount = () => {
-        this.call_profile_api();
-        this.call_delivery_api();
+        // this.call_profile_api();
+        // this.call_delivery_api();
     }
 
     call_profile_api = () => {
@@ -90,7 +92,8 @@ class DashboardScreen extends Component {
                     </View>
                 </View>
                 <View style={{padding: 20}}>
-                    <Image source={require("./assets/images/warehouse.gif")} style={{height: 500, width: "100%"}}/>
+                    <Image source={require("./assets/images/warehouse.gif")}
+                           style={{height: 500, width: "100%"}}/>
                     <View style={{flexDirection: "row"}}>
                         <View style={{flex: 1}}>
                             <Text style={{fontWeight: "bold", fontSize: 24}}>Warehouse</Text>
@@ -126,7 +129,8 @@ class DashboardScreen extends Component {
                     <View style={{marginTop: 20, alignItems: "center"}}>
                         <TouchableOpacity onPress={() => this.props.navigation.navigate("History")}>
                             <Text style={{fontWeight: "bold", fontSize: 15, color: colors.blue}}>
-                                <MaterialCommunityIcons name={"link"} size={15}/>Click to view History of Deliveries
+                                <MaterialCommunityIcons name={"link"} size={15}/>Click to view History of
+                                Deliveries
                             </Text>
                         </TouchableOpacity>
                     </View>
@@ -161,6 +165,7 @@ class DashboardScreen extends Component {
                 {/*</View>*/}
 
             </BaseScreen>
+
         );
     }
 }
