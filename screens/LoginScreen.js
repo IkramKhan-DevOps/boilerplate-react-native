@@ -5,9 +5,9 @@ import colors from "../config/Colors";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {AuthContext} from "../context/AuthContext";
 import {AxiosContext} from "../context/AxioContext";
-import {setGenericPassword} from "react-native-keychain";
+import * as Keychain from "react-native-keychain";
 
-const LoginScreen = () => {
+const LoginScreen = ({navigation}) => {
     const [emailInput, setEmail] = useState(null);
     const [passwordInput, setPassword] = useState(null);
     const [phone, setPhone] = useState(null);
@@ -16,6 +16,7 @@ const LoginScreen = () => {
     const {publicAxios} = useContext(AxiosContext);
 
     const handleLogin = async () => {
+
         try {
             const response = await publicAxios.post(
                 '/auth/rider/login/', {
@@ -24,20 +25,17 @@ const LoginScreen = () => {
                 });
 
             const {refresh, access} = response.data.tokens;
-            console.log(response.data.tokens)
             authContext.setAuthState({
                 accessToken: access,
                 refreshToken: refresh,
                 authenticated: true,
             });
 
-            await setGenericPassword(
-                'tokens',
-                JSON.stringify({
-                    accessToken: access,
-                    refreshToken: refresh,
-                }),
-            );
+            await AsyncStorage.setItem('access', access)
+            await AsyncStorage.setItem('refresh', refresh)
+
+            await navigation.navigate("Dashboard")
+
         } catch (error) {
             console.log(error)
             Alert.alert('Login Failed', "Login failed");

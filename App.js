@@ -10,6 +10,7 @@ import * as Keychain from "react-native-keychain";
 import {AuthContext, AuthProvider} from "./context/AuthContext";
 import Spinner from "./components/Spinner";
 import {AxiosProvider} from "./context/AxioContext";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Stack = createNativeStackNavigator();
 
@@ -19,22 +20,20 @@ const App = () => {
     const authContext = useContext(AuthContext);
     const [status, setStatus] = useState('loading');
 
-    console.log("App started")
-
     const loadJWT = useCallback(async () => {
         try {
-            const value = await Keychain.getGenericPassword();
-            const jwt = JSON.parse(value.password);
+            const access = await AsyncStorage.getItem('access');
+            const refresh = await AsyncStorage.getItem('refresh');
 
             authContext.setAuthState({
-                accessToken: jwt.accessToken || null,
-                refreshToken: jwt.refreshToken || null,
-                authenticated: jwt.accessToken !== null,
+                accessToken: access || null,
+                refreshToken: refresh || null,
+                authenticated: access !== null,
             });
             setStatus('success');
         } catch (error) {
             setStatus('error');
-            console.log(`Keychain Error: ${error.message}`);
+            console.log(`Asyc Error: ${error.message}`);
             authContext.setAuthState({
                 accessToken: null,
                 refreshToken: null,
