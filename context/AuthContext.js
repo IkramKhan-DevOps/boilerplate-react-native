@@ -1,44 +1,24 @@
-//AuthContext.js
-import React, {createContext, useState} from 'react';
-import * as Keychain from 'react-native-keychain';
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import {createContext, useState} from "react";
 
-const AuthContext = createContext(null);
-const {Provider} = AuthContext;
+export const AuthContext = createContext();
 
-const AuthProvider = ({children}) => {
-    const [authState, setAuthState] = useState({
-        accessToken: null,
-        refreshToken: null,
-        authenticated: null,
-    });
+export const AuthProvider = ({children}) => {
+    const [isLoading, setIsLoading] = useState(false)
+    const [userToken, setUserToken] = useState("")
 
-    const logout = async () => {
-        await AsyncStorage.removeItem("access")
-        await AsyncStorage.removeItem("refresh")
-        
-        setAuthState({
-            accessToken: null,
-            refreshToken: null,
-            authenticated: false,
-        });
-    };
+    const login = () => {
+        setUserToken("token from MARK!")
+        setIsLoading(false)
+    }
 
-    const getAccessToken = () => {
-        return authState.accessToken;
-    };
+    const logout = () => {
+        setUserToken(null)
+        setIsLoading(true)
+    }
 
     return (
-        <Provider
-            value={{
-                authState,
-                getAccessToken,
-                setAuthState,
-                logout,
-            }}>
+        <AuthContext.Provider value={{login, logout, isLoading, userToken}}>
             {children}
-        </Provider>
-    );
-};
-
-export {AuthContext, AuthProvider};
+        </AuthContext.Provider>
+    )
+}
