@@ -9,6 +9,7 @@ const LoginScreen = ({navigation}) => {
     const [passwordInput, setPassword] = useState(null);
     const [phone, setPhone] = useState(null);
     const [loading, setLoading] = useState(null);
+
     const {login} = useContext(AuthContext)
 
     return (
@@ -30,7 +31,7 @@ const LoginScreen = ({navigation}) => {
                        source={require("../assets/images/logo-red-1000.png")}
                 />
                 <Text style={{fontWeight: "bold", fontSize: 40, color: colors.light}}>
-                    {login()}
+                    Exarth
                 </Text>
                 <Text style={{fontWeight: "bold", fontSize: 20, color: colors.light}}>
                     The home of exalters
@@ -72,7 +73,7 @@ const LoginScreen = ({navigation}) => {
 
             <View style={{padding: 20, paddingHorizontal: 30, width: "100%"}}>
                 <CustomButton title={"LoginScreen"}
-                              color={colors.danger}/>
+                              color={colors.danger} onPress={() => login(emailInput, passwordInput)}/>
                 {/*<CustomButton title={"Signup"} onPress={() => console.log("Sign up")} color={colors.success}/>*/}
                 <Text style={{color: colors.light, marginTop: 10, textAlign: "center"}}>
                     Forget password ? please consult administration

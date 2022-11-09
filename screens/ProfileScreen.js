@@ -1,6 +1,9 @@
 import {Platform, SafeAreaView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
 import colors from "../config/Colors";
-import {useState} from "react";
+import {useContext, useEffect, useState} from "react";
+import axios from "axios";
+import {profileUrl} from "../config/API";
+import {AuthContext} from "../context/AuthContext";
 
 function ProfileScreen({navigation}) {
 
@@ -9,10 +12,43 @@ function ProfileScreen({navigation}) {
     const [lastNameValue, setLastName] = useState(null);
     const [emailValue, setEmail] = useState(null);
     const [phoneValue, setPhone] = useState(null);
+    const {accessToken} = useContext(AuthContext)
 
-    function handleSubmit() {
-        
+    function userProfileGetAPICall() {
+        axios.get(profileUrl, {
+            headers: {Authorization: `Bearer ${accessToken}`}
+        }).then(r => {
+            setUsername(r.data.username)
+            setFirstName(r.data.first_name)
+            setLastName(r.data.last_name)
+            setEmail(r.data.email)
+            setPhone(r.data.phone_number)
+        }).catch(e => {
+            console.log(e)
+        })
     }
+
+    function userProfileUpdateAPICall() {
+        const data = {
+            username: usernameValue,
+            first_name: firstNameValue,
+            last_name: lastNameValue,
+            email: emailValue,
+            phone_number: phoneValue,
+        }
+
+        axios.put(profileUrl, data, {
+            headers: {Authorization: `Bearer ${accessToken}`}
+        }).then(r => {
+            console.log(r)
+        }).catch(e => {
+            console.log(e)
+        })
+    }
+
+    useEffect(() => {
+        userProfileGetAPICall();
+    }, [])
 
     return (
         <View style={{padding: 20}}>
@@ -58,7 +94,7 @@ function ProfileScreen({navigation}) {
                 </Text>
 
                 <TouchableOpacity
-                    onPress={handleSubmit}
+                    onPress={() => userProfileUpdateAPICall()}
                     style={{marginTop: 10, padding: 20, borderRadius: 25, backgroundColor: colors.success}}>
                     <Text style={{textAlign: "center", fontWeight: "bold", color: colors.light, fontSize: 20}}>
                         Submit

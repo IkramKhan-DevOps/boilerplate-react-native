@@ -1,30 +1,23 @@
 import {NavigationContainer} from "@react-navigation/native";
 import AuthStack from "./AuthStack";
-import DashboardScreen from "../screens/Dashboard";
-import LoginScreen from "../screens/LoginScreen";
-import ProfileScreen from "../screens/ProfileScreen";
-import PasswordChangeScreen from "../screens/PasswordChangeScreen";
-import HistoryScreen from "../screens/HistoryScreen";
 import React, {useContext, useRef, useState} from "react";
 import {createNativeStackNavigator} from "react-native-screens/native-stack";
 import {AuthContext} from "../context/AuthContext";
-import Spinner from "../components/Spinner";
 import AppStack from "./AppStack";
+import Spinner from "../components/Spinner";
 
 const Stack = createNativeStackNavigator();
 
 function AppNav() {
-    const {isLoading, userToken} = useContext(AuthContext)
-    const [refUserToken, setRefUserToken] = useState(userToken)
-    const [refIsLoading, setRefIsLoading] = useState(isLoading)
+    const {isLoading, accessToken} = useContext(AuthContext)
 
-    if (refIsLoading) {
+    if (isLoading) {
         return <Spinner/>
     }
 
     return (
         <NavigationContainer>
-            {refUserToken === null ? <AuthStack/> : <AppStack/>}
+            {accessToken === null ? (<AuthStack/>) : (<AppStack/>)}
         </NavigationContainer>
     )
 }
